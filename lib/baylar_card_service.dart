@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'dart:async';
-import 'dart:convert';
 
 class BaylanCardService {
   static const MethodChannel _channel = MethodChannel('baylan_card_credit');
@@ -8,7 +7,7 @@ class BaylanCardService {
   // Callback listeners
   static Function(String message, String resultCode)? onResult;
   static Function(Map<String, dynamic>? cardData, String resultCode)?
-  onReadCard;
+      onReadCard;
   static Function(String resultCode)? onWriteCard;
 
   BaylanCardService() {
@@ -90,7 +89,9 @@ class BaylanCardService {
   // Kart okuma
   Future<void> readCard(String requestId) async {
     try {
-      await _channel.invokeMethod('readCard', {'requestId': requestId});
+      await _channel.invokeMethod('readCard', {
+        'requestId': requestId,
+      });
     } catch (e) {
       print('Read card error: $e');
     }
@@ -100,7 +101,7 @@ class BaylanCardService {
   Future<void> writeCard({
     required String requestId,
     required int
-    operationType, // 0: None, 1: AddCredit, 2: ClearCredits, 3: SetCredit
+        operationType, // 0: None, 1: AddCredit, 2: ClearCredits, 3: SetCredit
     required double credit,
     required double reserveCreditLimit,
     required double criticalCreditLimit,
@@ -265,9 +266,8 @@ class ConsumerCard {
       customerType: map['customerType'],
       battery: map['battery']?.toDouble(),
       reserveBattery: map['reserveBattery']?.toInt(),
-      meterDate: map['meterDate'] != null
-          ? DateTime.parse(map['meterDate'])
-          : null,
+      meterDate:
+          map['meterDate'] != null ? DateTime.parse(map['meterDate']) : null,
       lastCreditDecreaseDate: map['lastCreditDecreaseDate'] != null
           ? DateTime.parse(map['lastCreditDecreaseDate'])
           : null,

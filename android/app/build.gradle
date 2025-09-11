@@ -69,7 +69,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     
     // Baylan Card Credit Library - dökümanınızdaki bilgilere göre
-    implementation 'com.baylan:baylan-card-credit-library:manisa-1.0.0' // Bu versiyonu kendi idarenize göre değiştirin
+    implementation 'com.baylan:baylan-card-credit-library:kahramanmaras-1.0.4' 
     
     // Diğer gerekli kütüphaneler
     implementation 'com.google.code.gson:gson:2.8.9'

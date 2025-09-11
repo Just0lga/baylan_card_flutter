@@ -94,9 +94,9 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
 
@@ -402,7 +402,10 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
                             label = 'Kredi Ayarla';
                             break;
                         }
-                        return DropdownMenuItem(value: op, child: Text(label));
+                        return DropdownMenuItem(
+                          value: op,
+                          child: Text(label),
+                        );
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
@@ -466,7 +469,9 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
                     ),
                     const SizedBox(height: 8),
                     if (_isLoading)
-                      const Center(child: CircularProgressIndicator())
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      )
                     else
                       Text(_statusMessage),
                   ],
@@ -489,49 +494,34 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
                       ),
                       const SizedBox(height: 16),
                       _buildCardInfoRow(
-                        'Kart Seri No',
-                        _currentCard!.cardSeriNo,
-                      ),
+                          'Kart Seri No', _currentCard!.cardSeriNo),
                       _buildCardInfoRow('Müşteri No', _currentCard!.customerNo),
                       _buildCardInfoRow('Sayaç No', _currentCard!.meterNo),
+                      _buildCardInfoRow('Ana Kredi',
+                          _currentCard!.mainCredit?.toStringAsFixed(2)),
+                      _buildCardInfoRow('Rezerv Kredi',
+                          _currentCard!.reserveCredit?.toStringAsFixed(2)),
                       _buildCardInfoRow(
-                        'Ana Kredi',
-                        _currentCard!.mainCredit?.toStringAsFixed(2),
-                      ),
+                          'Kritik Kredi Limiti',
+                          _currentCard!.criticalCreditLimit
+                              ?.toStringAsFixed(2)),
                       _buildCardInfoRow(
-                        'Rezerv Kredi',
-                        _currentCard!.reserveCredit?.toStringAsFixed(2),
-                      ),
+                          'Batarya', _currentCard!.battery?.toStringAsFixed(1)),
+                      _buildCardInfoRow('Toplam Tüketim',
+                          _currentCard!.totalConsumption?.toStringAsFixed(2)),
                       _buildCardInfoRow(
-                        'Kritik Kredi Limiti',
-                        _currentCard!.criticalCreditLimit?.toStringAsFixed(2),
-                      ),
-                      _buildCardInfoRow(
-                        'Batarya',
-                        _currentCard!.battery?.toStringAsFixed(1),
-                      ),
-                      _buildCardInfoRow(
-                        'Toplam Tüketim',
-                        _currentCard!.totalConsumption?.toStringAsFixed(2),
-                      ),
-                      _buildCardInfoRow(
-                        'Sayaçtaki Kalan Kredi',
-                        _currentCard!.remainingCreditOnMeter?.toStringAsFixed(
-                          2,
-                        ),
-                      ),
+                          'Sayaçtaki Kalan Kredi',
+                          _currentCard!.remainingCreditOnMeter
+                              ?.toStringAsFixed(2)),
                       if (_currentCard!.meterDate != null)
-                        _buildCardInfoRow(
-                          'Sayaç Tarihi',
-                          _currentCard!.meterDate!.toString().split(' ')[0],
-                        ),
+                        _buildCardInfoRow('Sayaç Tarihi',
+                            _currentCard!.meterDate!.toString().split(' ')[0]),
                       if (_currentCard!.lastCreditChargeDate != null)
                         _buildCardInfoRow(
-                          'Son Kredi Yükleme',
-                          _currentCard!.lastCreditChargeDate!.toString().split(
-                                ' ',
-                              )[0],
-                        ),
+                            'Son Kredi Yükleme',
+                            _currentCard!.lastCreditChargeDate!
+                                .toString()
+                                .split(' ')[0]),
                     ],
                   ),
                 ),
@@ -556,7 +546,9 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(child: Text(value ?? 'N/A')),
+          Expanded(
+            child: Text(value ?? 'N/A'),
+          ),
         ],
       ),
     );
