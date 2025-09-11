@@ -17,8 +17,8 @@ pluginManagement {
         maven {
             url = uri("https://repo.baylan.info.tr/repository/maven-releases/")
             credentials {
-                username = "kahramanmaras.kaski" 
-                password = ")ei.f3rocX6nP:PD" 
+                username = "kahramanmaras.kaski"
+                password = ")ei.f3rocX6nP:PD"
             }
         }
     }
@@ -39,8 +39,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://repo.baylan.info.tr/repository/maven-releases/")
             credentials {
-                username = "kahramanmaras.kaski" 
-                password = ")ei.f3rocX6nP:PD" 
+                username = "kahramanmaras.kaski"
+                password = ")ei.f3rocX6nP:PD"
             }
         }
     }
