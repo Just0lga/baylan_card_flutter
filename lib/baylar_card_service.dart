@@ -5,6 +5,7 @@ class BaylanCardService {
   static const MethodChannel _channel = MethodChannel('baylan_card_credit');
 
   // Callback listeners
+  // Neden static callbackler global erişilebilir olmalı çünkü farklı widgetlarda kullanılabilirler
   static Function(String message, String resultCode)? onResult;
   static Function(Map<String, dynamic>? cardData, String resultCode)?
       onReadCard;

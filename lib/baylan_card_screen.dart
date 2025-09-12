@@ -32,6 +32,7 @@ class _BaylanCardScreenState extends State<BaylanCardScreen> {
   @override
   void initState() {
     super.initState();
+    _licenseKeyController.text = "9283ebb4-9822-46fa-bbe3-ac4a4d25b8c2";
     _initializeService();
     _requestPermissions();
     _loadInitialUrl();

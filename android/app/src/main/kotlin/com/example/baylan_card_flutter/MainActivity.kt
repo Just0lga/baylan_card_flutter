@@ -6,7 +6,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
-
+// Mavendan gelen hazır kütüphane
 import com.bubuapps.baylancardcreditlibrary.BaylanCardCreditLibrary
 import com.bubuapps.baylancardcreditlibrary.Interface.IBaylanCardCreditLibrary
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.ConsumerCardDTO
@@ -21,19 +21,26 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+// Flutter Activity: Flutterın ana activitysi: Flutter ekranlarını görebilmek için gerekli 
+// IBaylanCardCreditLibrary ise baylan kütüphanesinden gelen callback interface, kart okuma yazma işlemleri bittiğinde bildirim almak için
+
 class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
-    private val CHANNEL = "baylan_card_credit"
-    private lateinit var methodChannel: MethodChannel
-    private lateinit var baylanCardCreditLibrary: BaylanCardCreditLibrary
+    // Flutter ile kotlin arasındaki bağlantıyı yapacak olan kanal
+    // 8 farklı method handle ediliyor
+    private val CHANNEL = "baylan_card_credit" // Flutter ile konuşma kanalının adı
+    private lateinit var methodChannel: MethodChannel // Flutter ile iletişim nesnesi
+    private lateinit var baylanCardCreditLibrary: BaylanCardCreditLibrary // Baylan kütüphanesinin nesnesi
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         
-        // Baylan kütüphanesini initialize et
+        // Baylan kütüphanesini başlat
         baylanCardCreditLibrary = BaylanCardCreditLibrary(this)
         
-        // Method channel'ı setup et
+        // Flutter ile konuşma kanalı kur
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+        
+        // Flutterdan gelecek çağrıları dinle
         methodChannel.setMethodCallHandler { call, result ->
             when (call.method) {
                 "checkLicense" -> checkLicense(result)
@@ -48,7 +55,8 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
             }
         }
         
-        // NFC'yi başlat
+        // NFC'yi otomatik başlat
+        // GlobalScope.launch: Kotlin coroutine(eş zamanlı olmayan bir işlemdir), NFC işlemi zaman alabilir bu yüzden arkaplanda çalışır
         GlobalScope.launch {
             baylanCardCreditLibrary.ActivateNFCCardReader()
         }
@@ -57,21 +65,29 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
+    
+    // Mevcut lisansı kontrol eden kod, kart okuma yazma öncesi license geçerli olmalı
     private fun checkLicense(result: Result) {
         try {
+            // Baylan kütüphanesine lisans durumunu sor
             val licenseResult = baylanCardCreditLibrary.CheckLicence()
+            
+            // Sonucu flutterın anlayacağı formata çevir
             val response = mapOf(
                 "resultCode" to licenseResult.ResultCode.name,
                 "message" to licenseResult.Message,
                 "isValid" to (licenseResult.ResultCode == enResultCodes.LicenseisValid)
             )
+
+            // Sonucu fluttera gönder
             result.success(response)
         } catch (e: Exception) {
+            // Hata varsa fluttera gönder
             result.error("LICENSE_ERROR", e.message, null)
         }
     }
-
+    
+    // Yeni lisans alır
     private fun getLicense(call: MethodCall, result: Result) {
         try {
             val requestId = call.argument<String>("requestId") ?: ""
@@ -94,6 +110,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
 
+    // NFC okuyucuyu aktif eder
     private fun activateNFC(result: Result) {
         try {
             val resultCode = baylanCardCreditLibrary.ActivateNFCCardReader()
@@ -103,6 +120,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
 
+    // NFC okuyucuyu kapatır
     private fun deactivateNFC(result: Result) {
         try {
             val resultCode = baylanCardCreditLibrary.DisapleNFCReader()
@@ -112,21 +130,28 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
 
+    // Kart okuma işlemini başlatır
     private fun readCard(call: MethodCall, result: Result) {
         try {
+            // Flutterdan gelen parametreleri al
             val requestId = call.argument<String>("requestId") ?: UUID.randomUUID().toString()
             
+            //Okuma isteği nesnesi oluştur
             val readCardRequest = ReadCardRequest().apply {
                 this.requestId = requestId
             }
             
+            // Okuma işlemini başlat
             baylanCardCreditLibrary.ReadCard(readCardRequest)
+            
+            // Fluttera işlem başladı de
             result.success("READ_STARTED")
         } catch (e: Exception) {
             result.error("READ_CARD_ERROR", e.message, null)
         }
     }
 
+    // Karta kredi yazma işlemi
     private fun writeCard(call: MethodCall, result: Result) {
         try {
             val requestId = call.argument<String>("requestId") ?: UUID.randomUUID().toString()
@@ -191,8 +216,11 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
 
+    // Okuma işleminden gelen veriyi okur
     override fun ReadCardResult(consumerCardDTO: ConsumerCardDTO?, code: ResultCode) {
         runOnUiThread {
+            
+            // 1. Kart verilerini Flutter formatına çevir
             val cardData = consumerCardDTO?.let { card ->
                 mapOf(
                     "reserveCreditLimit" to card.reserveCreditLimit,
@@ -252,6 +280,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
                 )
             }
             
+            // Fluttera bu verileri gönder
             methodChannel.invokeMethod("onReadCard", mapOf(
                 "cardData" to cardData,
                 "resultCode" to code.name
