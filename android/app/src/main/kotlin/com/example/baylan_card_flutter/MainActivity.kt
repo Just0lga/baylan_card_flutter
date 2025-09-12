@@ -6,23 +6,25 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
-// Mavendan gelen hazır kütüphane
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.randomUUID
 import com.bubuapps.baylancardcreditlibrary.BaylanCardCreditLibrary
-import com.bubuapps.baylancardcreditlibrary.Interface.IBaylanCardCreditLibrary
-import com.bubuapps.baylancardcreditlibrary.Model.DTO.ConsumerCardDTO
-import com.bubuapps.baylancardcreditlibrary.Model.DTO.CreditRequestDTO
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.Enums.ResultCode
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.Enums.enOperationType
+import com.bubuapps.baylancardcreditlibrary.Interface.IBaylanCardCreditLibrary
+import com.bubuapps.baylancardcreditlibrary.Model.Card.Model.CardStatus2
+import com.bubuapps.baylancardcreditlibrary.Model.DTO.ConsumerCardDTO
+import com.bubuapps.baylancardcreditlibrary.Model.DTO.CreditRequestDTO
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.Enums.enResultCodes
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.LicenseRequest
 import com.bubuapps.baylancardcreditlibrary.Model.DTO.ReadCardRequest
 import com.bubuapps.baylancardcreditlibrary.Model.Service.ResultModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.util.UUID
 
-// Flutter Activity: Flutterın ana activitysi: Flutter ekranlarını görebilmek için gerekli 
-// IBaylanCardCreditLibrary ise baylan kütüphanesinden gelen callback interface, kart okuma yazma işlemleri bittiğinde bildirim almak için
+
+Tolga bey, bir de event_channel koyun buraya. override ettiğiniz methodlarımızı tetikleyeiblmemiz için gerekiyor. Ekstra olarak bir şey kalmadı gerisi sizde :)
+yardımcı olabilecğem başka bir şey var mıdır? Implementation tamam 
+url ve şifreler doğruysa devamını inceleyeceğim çok teşekkür edeirm, sorunum olursa rahatsız ederim teşekkürler r,ca ederiz iyi günler iyi günlerrr
 
 class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
     // Flutter ile kotlin arasındaki bağlantıyı yapacak olan kanal

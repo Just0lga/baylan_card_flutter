@@ -1,79 +1,81 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
-}
+plugins { 
+    id "com.android.application" 
+    id "kotlin-android" 
+    id "dev.flutter.flutter-gradle-plugin" 
+} 
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
-}
+def localProperties = new Properties() 
+def localPropertiesFile = rootProject.file('local.properties') 
+if (localPropertiesFile.exists()) { 
+    localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) } 
+} 
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') 
+if (flutterVersionCode == null) { 
+    flutterVersionCode = '1' 
+} 
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+def flutterVersionName = localProperties.getProperty('flutter.versionName') 
+if (flutterVersionName == null) { 
+    flutterVersionName = '1.0' 
+} 
 
-android {
-    namespace "com.example.baylan_card_flutter"
-    compileSdk 34
-    ndkVersion flutter.ndkVersion
+android { 
+    namespace "com.example.baylan_card_flutter" 
+    compileSdk 34 
+    ndkVersion flutter.ndkVersion 
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
+    compileOptions { 
+        sourceCompatibility JavaVersion.VERSION_11 
+        targetCompatibility JavaVersion.VERSION_11 
+    } 
 
-    kotlinOptions {
-        jvmTarget = '11'
-    }
+    kotlinOptions { 
+        jvmTarget = '11' 
+    } 
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
+    sourceSets { 
+        main.java.srcDirs += 'src/main/kotlin' 
+    } 
 
-    defaultConfig {
-        applicationId "com.example.baylan_card_flutter"
-        minSdk 26  // NFC için minimum SDK
-        targetSdk 34
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
+    defaultConfig { 
+        applicationId "com.example.baylan_card_flutter" 
+        minSdk 26 // NFC için minimum SDK 
+        targetSdk 34 
+        versionCode flutterVersionCode.toInteger() 
+        versionName flutterVersionName 
+    } 
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+    buildTypes { 
+        release { 
+            signingConfig signingConfigs.debug 
+            minifyEnabled true 
+            shrinkResources true 
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' 
+        } 
+    } 
+} 
 
-flutter {
-    source '../..'
-}
+flutter { 
+    source '../..' 
+} 
 
 dependencies {
-    // Kotlin standard library - modern versiyon management ile
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    
-    // Baylan Card Credit Library
-    implementation 'com.baylan:baylan-card-credit-library:kahramanmaras-1.0.4'
-    
-    // Diğer gerekli kütüphaneler
-    implementation 'com.google.code.gson:gson:2.8.9'
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+//    implementation project(path: ':BaylanCardCreditLibrary')
     implementation 'org.modelmapper:modelmapper:2.4.4'
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation 'com.google.code.gson:gson:2.8.9'
+//
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-    implementation "androidx.security:security-crypto:1.1.0-alpha06"
-}
+    implementation "androidx.security:security-crypto:1.1.0-alpha01"
+
+    // Baylan Card Library - Doğru artifact bilgileri 
+    implementation 'com.baylan:baylan-card-credit-library:kahramanmaras-1.0.9'
+} 

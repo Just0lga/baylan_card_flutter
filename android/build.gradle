@@ -1,26 +1,30 @@
-allprojects {
-    repositories {
-        google()
+allprojects { 
+    repositories { 
+        google() 
         mavenCentral()
-        // Baylan Maven Repository
-        maven {
-            url "https://repo.baylan.info.tr/repository/maven-releases/"
-            credentials {
-                username project.hasProperty('baylanMavenUser') ? project.baylanMavenUser : ""
-                password project.hasProperty('baylanMavenPassword') ? project.baylanMavenPassword : ""
-            }
-        }
-    }
-}
+        // Baylan Maven Repository - Doğru repository 
+        maven { 
+            url = uri("https://repo.baylan.info.tr/nexus/repository/kahramanmaras-release/")
+            credentials { 
+                username = "kahramanmaras.kaski" 
+                password = ")ei.f3rocX6nP:PD" 
+            } 
+        } 
+    } 
+} 
+//https://repo.baylan.info.tr/nexus/repository/baylan-card-library/com/baylan/baylan-card-library/baylan-1.0.1/baylan-card-library-baylan-1.0.1.pom
+//https://repo.baylan.info.tr/nexus/repository/kahramanmaras-release/com/baylan/baylan-card-credit-library/kahramanmaras-1.0.1/baylan-card-credit-library-kahramanmaras-1.0.1.pom
 
-rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
-}
+rootProject.buildDir = '../build' 
 
-tasks.register("clean", Delete) {
-    delete rootProject.buildDir
-}
+subprojects { 
+    project.buildDir = "${rootProject.buildDir}/${project.name}" 
+} 
+
+subprojects { 
+    project.evaluationDependsOn(':app') 
+} 
+
+tasks.register("clean", Delete) { 
+    delete rootProject.buildDir 
+} 
