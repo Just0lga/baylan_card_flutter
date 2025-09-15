@@ -1,20 +1,24 @@
 name: baylan_card_flutter
-description: Baylan Card Credit Flutter Integration
-
+description: Baylan NFC Card Credit Management System
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  
+  # UI & Icons
   cupertino_icons: ^1.0.2
-  permission_handler: ^11.0.1
-  uuid: ^4.0.0
+  uuid: ^4.5.1
+  # Utilities
+  intl: ^0.18.1  # Tarih formatı için
+  crypto: ^3.0.3  # SHA256 hash için (RequestId oluşturma)
+  
+  # HTTP istekleri için (BMS API entegrasyonu gerektiğinde)
+  # http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
