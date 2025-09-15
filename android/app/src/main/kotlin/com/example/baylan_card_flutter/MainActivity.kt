@@ -7,8 +7,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.EventChannel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.UUID
 import android.util.Log
 import com.bubuapps.baylancardcreditlibrary.BaylanCardCreditLibrary
@@ -65,10 +63,12 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
                 handleMethodCall(call, result)
             }
             
-            // Çalışan kod gibi GlobalScope kullan
-            GlobalScope.launch {
+            // ORİJİNAL KOD GİBİ SYNC ÇALIŞTIR - async sarmalamayın
+            try {
                 baylanCardCreditLibrary.ActivateNFCCardReader()
-                checkLicenceSync() // Sync versiyon
+                CheckLicence() // Direkt sync çağrı
+            } catch (e: Exception) {
+                Log.e(TAG, "Initialization failed", e)
             }
             
         } catch (e: Exception) {
@@ -89,13 +89,12 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
     
-    // Çalışan koddan kopyalanan sync CheckLicence metodu
-    private fun checkLicenceSync() {
+    // ORİJİNAL KODUN BİREBİR KOPYASI - async değil sync
+    private fun CheckLicence() {
         try {
             if (baylanCardCreditLibrary.CheckLicence().ResultCode == enResultCodes.LicenseisValid) {
                 Log.d(TAG, "License is valid")
                 runOnUiThread {
-                    // Flutter'a bildir
                     eventSink?.success(mapOf(
                         "type" to "licenseValid",
                         "message" to "License is valid"
@@ -114,7 +113,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
                     Log.d(TAG, "New license acquired successfully")
                     runOnUiThread {
                         eventSink?.success(mapOf(
-                            "type" to "licenseAcquired",
+                            "type" to "licenseAcquired", 
                             "message" to resultModel.Message
                         ))
                     }
@@ -168,7 +167,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
     
-    // Çalışan kod stilinde düzeltilmiş checkLicense
+    // Sync versiyon - Flutter'dan çağrıldığında
     private fun checkLicense(result: Result) {
         try {
             val licenseResult = baylanCardCreditLibrary.CheckLicence()
@@ -237,7 +236,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         try {
             val requestId = call.argument<String>("requestId") ?: UUID.randomUUID().toString()
             
-            // Sabit URL'yi her seferinde set et (çalışan kod gibi)
+            // URL'yi her seferinde set et
             baylanCardCreditLibrary.SetUrl(BAYLAN_SERVER_URL)
             Log.d(TAG, "URL set for read operation: $BAYLAN_SERVER_URL")
             
@@ -321,7 +320,7 @@ class MainActivity: FlutterActivity(), IBaylanCardCreditLibrary {
         }
     }
 
-    // IBaylanCardCreditLibrary interface implementations - çalışan kodla aynı
+    // IBaylanCardCreditLibrary interface implementations
     override fun OnResult(tag: String?, code: ResultCode) {
         runOnUiThread {
             try {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'read_nfc_screen.dart';
 import 'write_nfc_screen.dart';
@@ -43,24 +45,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initializeApp() async {
+    setState(() {
+      _licenseStatus = 'Lisans kontrol ediliyor...';
+    });
+
     try {
-      // Otomatik lisans kontrolü ve alma
-      final isValid = await NFCService.instance.ensureValidLicense();
+      // Timeout ekleyin
+      final isValid = await NFCService.instance
+          .ensureValidLicense()
+          .timeout(const Duration(seconds: 20));
 
       setState(() {
         _isLicenseChecked = true;
         _isLicenseValid = isValid;
         _licenseStatus = isValid ? 'Lisans aktif ✓' : 'Lisans alınamadı ✗';
       });
-
-      // Lisans başarılıysa NFC'yi aktif et
-      if (isValid) {
-        try {
-          await NFCService.instance.activateNFC();
-        } catch (e) {
-          print('NFC aktivasyonu opsiyonel hata: $e');
-        }
-      }
+    } on TimeoutException {
+      setState(() {
+        _isLicenseChecked = true;
+        _isLicenseValid = false;
+        _licenseStatus = 'Lisans kontrolü zaman aşımı';
+      });
     } catch (e) {
       setState(() {
         _isLicenseChecked = true;

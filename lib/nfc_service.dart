@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'package:uuid/uuid.dart';
 
 class NFCService {
   static const MethodChannel _methodChannel =
@@ -26,16 +25,8 @@ class NFCService {
     return _eventStream!;
   }
 
-  // Benzersiz RequestId oluştur
   String generateRequestId() {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final random = DateTime.now().microsecondsSinceEpoch;
-    final data = '$timestamp-$random';
-    final bytes = utf8.encode(data);
-    final digest = sha256.convert(bytes);
-
-    final hex = digest.toString();
-    return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-${hex.substring(12, 16)}-${hex.substring(16, 20)}-${hex.substring(20, 32)}';
+    return const Uuid().v4();
   }
 
   // PayDeskCode yönetimi
