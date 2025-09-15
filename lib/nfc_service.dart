@@ -74,15 +74,14 @@ class NFCService {
     }
   }
 
-  // Otomatik lisans kontrolü (geliştirilmiş versiyon)
+  // Otomatik lisans kontrolü (basitleştirilmiş)
   Future<bool> ensureValidLicense() async {
     try {
-      // Debug bilgilerini yazdır
-      await debugLicenseInfo();
+      print('Checking license...');
 
       // Önce mevcut lisansı kontrol et
       final checkResult = await checkLicense();
-      print('License check completed: ${checkResult['isValid']}');
+      print('License check result: ${checkResult['isValid']}');
 
       if (checkResult['isValid'] == true) {
         return true;
@@ -91,11 +90,11 @@ class NFCService {
       // Lisans geçersizse yeni lisans al
       print('Getting new license...');
       final licenseResult = await getLicense();
-      print('License acquisition completed: ${licenseResult['isValid']}');
+      print('License acquisition result: ${licenseResult['isValid']}');
 
       return licenseResult['isValid'] == true;
     } catch (e) {
-      print('Lisans işlemi hatası: $e');
+      print('License error: $e');
       return false;
     }
   }
@@ -180,38 +179,6 @@ class NFCService {
       return result.toString();
     } catch (e) {
       throw Exception('URL alma başarısız: $e');
-    }
-  }
-
-  // NFCService.dart içinde debug için bu metodu ekleyin
-
-// Debug için lisans detaylarını gösteren method
-  Future<void> debugLicenseInfo() async {
-    try {
-      print('=== LISANS DEBUG BAŞLANGICI ===');
-
-      // 1. Mevcut lisans kontrolü
-      print('1. Mevcut lisans kontrol ediliyor...');
-      final checkResult = await checkLicense();
-      print('Check Result: $checkResult');
-
-      // 2. Eğer geçersizse yeni lisans almayı dene
-      if (checkResult['isValid'] != true) {
-        print('2. Yeni lisans alınmaya çalışılıyor...');
-        final licenseResult = await getLicense();
-        print('License Result: $licenseResult');
-
-        // 3. Tekrar kontrol et
-        print('3. Tekrar kontrol ediliyor...');
-        final recheckResult = await checkLicense();
-        print('Recheck Result: $recheckResult');
-      } else {
-        print('Lisans zaten geçerli!');
-      }
-
-      print('=== LISANS DEBUG BİTİŞİ ===');
-    } catch (e) {
-      print('LISANS DEBUG HATASI: $e');
     }
   }
 }

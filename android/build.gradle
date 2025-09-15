@@ -12,8 +12,6 @@ allprojects {
         } 
     } 
 } 
-//https://repo.baylan.info.tr/nexus/repository/baylan-card-library/com/baylan/baylan-card-library/baylan-1.0.1/baylan-card-library-baylan-1.0.1.pom
-//https://repo.baylan.info.tr/nexus/repository/kahramanmaras-release/com/baylan/baylan-card-credit-library/kahramanmaras-1.0.1/baylan-card-credit-library-kahramanmaras-1.0.1.pom
 
 rootProject.buildDir = '../build' 
 
